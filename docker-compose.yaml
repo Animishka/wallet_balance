@@ -1,0 +1,30 @@
+version: '3'
+
+volumes:
+  redis_db_volume:
+
+services:
+  parser:
+    build: parser/
+    restart: always
+    environment:
+      - REDIS_DB=redis_db
+      - URL_FOR_PARSING=https://api.ethplorer.io/getAddressInfo/0x51F70063FE98fFDc063e532Cd81481d76A9828e5?apiKey=freekey
+
+  tg_notifier:
+    build: tg_notifier/
+    restart: always
+    environment:
+      - API_TOKEN=
+      - REDIS_DB=redis_db
+      - USER_ID=
+
+  redis_db:
+    image: redis:latest
+    volumes:
+      - redis_db_volume:/data
+    restart: always
+
+
+
+
